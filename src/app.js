@@ -103,16 +103,10 @@ async function deleteNote(id) {
   }
 }
 
-// Event listener untuk form tambah catatan
-document.querySelector("note-form").shadowRoot.getElementById("note-form").addEventListener("submit", (event) => {
-  event.preventDefault();
-  const title = document.getElementById('title').value;
-  const body = document.getElementById('body').value;
-  if (title && body) {
-    addNote(title, body);
-    document.getElementById('title').value = '';
-    document.getElementById('body').value = '';
-  }
+// Menangani event kustom dari note-form
+document.addEventListener("note-added", (event) => {
+  const { title, body } = event.detail;
+  addNote(title, body);
 });
 
 // Fetch data awal saat halaman dimuat
