@@ -1,0 +1,87 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.app-bar {
+  background-color: #007bff;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.note-form-container {
+  background: white;
+  padding: 1rem;
+  margin: 1rem auto;
+  max-width: 500px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.note-form-container input,
+.note-form-container textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.note-form-container button {
+  width: 100%;
+  padding: 0.7rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.notes-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  padding: 1rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.note-item {
+  background: white;
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.note-item h3 {
+  margin: 0;
+}
+
+.note-item p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.note-item button {
+  margin-top: 10px;
+  padding: 0.5rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.note-item button:first-of-type {
+  background-color: #28a745;
+  color: white;
+}
+
+.note-item button:last-of-type {
+  background-color: #dc3545;
+  color: white;
+}

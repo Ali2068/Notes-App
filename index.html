@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Notes App</title>
+    <script defer src="src/app-bar.js"></script>
+    <script defer src="src/note-form.js"></script>
+    <script defer src="src/notes-list.js"></script>
+    <script defer src="src/archived-notes-list.js"></script>
+    <script defer src="src/app-footer.js"></script>
+</head>
+<body>
+    <app-bar></app-bar>
+    <main>
+        <section class="note-form-container">
+            <h2>Add a New Note</h2>
+            <note-form></note-form>
+        </section>
+        <section class="notes-section">
+            <notes-list></notes-list>
+        </section>
+        <section class="notes-section">
+            <archived-notes-list></archived-notes-list>
+        </section>
+    </main>
+    <app-footer></app-footer>
+</body>
+</html>
