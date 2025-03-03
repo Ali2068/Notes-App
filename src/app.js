@@ -71,9 +71,9 @@ async function fetchNotes() {
       throw new Error('Note list elements not found');
     }
 
-    // Bersihkan daftar sebelum menambahkan data baru
-    noteList.innerHTML = '';
-    archivedNoteList.innerHTML = '';
+    // Reset isi elemen, lalu tambahkan kembali judulnya
+    noteList.innerHTML = `<h2>Active Notes</h2>`;
+    archivedNoteList.innerHTML = `<h2>Archived Notes</h2>`;
 
     // Memasukkan catatan aktif
     activeResult.data.forEach(note => {
