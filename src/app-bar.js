@@ -1,8 +1,7 @@
 class AppBar extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({ mode: 'open' });
-        this.shadowRoot.innerHTML = `
+        this.innerHTML = `
             <style>
                 .app-bar { 
                     font-size: 24px; 
