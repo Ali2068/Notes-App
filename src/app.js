@@ -88,6 +88,24 @@ async function addNote(title, body) {
   }
 }
 
+// Fungsi untuk mengarsipkan atau membatalkan arsip catatan
+async function toggleArchive(id, isArchived) {
+  showLoadingIndicator();
+  try {
+    const response = await fetch(`${BASE_URL}/notes/${id}/archive`, {
+      method: isArchived ? 'PUT' : 'DELETE',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    if (!response.ok) throw new Error('Failed to toggle archive');
+    fetchNotes();
+  } catch (error) {
+    console.error('Error toggling archive:', error);
+    showError(error.message);
+  } finally {
+    hideLoadingIndicator();
+  }
+}
+
 // Menghapus catatan dari server
 async function deleteNote(id) {
   showLoadingIndicator();
