@@ -63,9 +63,20 @@ function createNoteElement(note) {
   noteItem.innerHTML = `
     <h3>${note.title}</h3>
     <p>${note.body}</p>
-    <button onclick="toggleArchive('${note.id}', ${note.archived})">${note.archived ? 'Unarchive' : 'Archive'}</button>
-    <button onclick="deleteNote('${note.id}')">Delete</button>
+    <button class="archive-btn">${note.archived ? 'Unarchive' : 'Archive'}</button>
+    <button class="delete-btn">Delete</button>
   `;
+
+  // Tambahkan event listener ke tombol archive
+  noteItem.querySelector('.archive-btn').addEventListener('click', () => {
+    toggleArchive(note.id, note.archived);
+  });
+
+  // Tambahkan event listener ke tombol delete
+  noteItem.querySelector('.delete-btn').addEventListener('click', () => {
+    deleteNote(note.id);
+  });
+
   return noteItem;
 }
 
@@ -92,12 +103,15 @@ async function addNote(title, body) {
 async function toggleArchive(id, isArchived) {
   showLoadingIndicator();
   try {
-    const response = await fetch(`${BASE_URL}/notes/${id}/archive`, {
-      method: isArchived ? 'PUT' : 'DELETE',
+    const endpoint = isArchived ? `${BASE_URL}/notes/${id}/unarchive` : `${BASE_URL}/notes/${id}/archive`;
+    const response = await fetch(endpoint, {
+      method: 'POST', // Dicoding API menggunakan POST untuk arsip/unarsip
       headers: { 'Content-Type': 'application/json' }
     });
+
     if (!response.ok) throw new Error('Failed to toggle archive');
-    fetchNotes();
+
+    fetchNotes(); // Refresh daftar catatan setelah perubahan
   } catch (error) {
     console.error('Error toggling archive:', error);
     showError(error.message);
