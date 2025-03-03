@@ -1,8 +1,7 @@
 class ArchivedNotesList extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({ mode: 'open' });
-        this.shadowRoot.innerHTML = `
+        this.innerHTML = `
             <h2>Archived Notes</h2>
             <div id="archived-notes-list" class="notes-container"></div>`;
     }
