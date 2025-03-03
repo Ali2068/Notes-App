@@ -1,11 +1,11 @@
-import '/styles.css';
+import './../styles.css';
 
-import '/src/app-bar.js';
-import '/src/app-footer.js';
+import './app-bar.js';
+import './app-footer.js';
  
-import '/src/note-form.js';
-import '/src/notes-list.js';
-import '/src/archived-notes-list.js';
+import './note-form.js';
+import './notes-list.js';
+import './archived-notes-list.js';
 
 const BASE_URL = 'https://notes-api.dicoding.dev/v2';
 
