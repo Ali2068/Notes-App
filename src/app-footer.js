@@ -1,8 +1,7 @@
 class AppFooter extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({ mode: 'open' });
-        this.shadowRoot.innerHTML = `
+        this.innerHTML = `
             <style>
                 .footer { 
                     text-align: center; 
