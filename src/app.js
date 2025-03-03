@@ -33,13 +33,19 @@ async function fetchNotes() {
     if (!response.ok) throw new Error('Failed to fetch notes');
     const result = await response.json();
     
-    // Membersihkan daftar sebelum menambahkan
-    const noteList = document.getElementById('notes-list');
-    const archivedNoteList = document.getElementById('archived-notes-list');
+    // Pastikan elemen yang digunakan sesuai dengan ID dalam HTML
+    const noteList = document.querySelector('notes-list');
+    const archivedNoteList = document.querySelector('archived-notes-list');
+
+    if (!noteList || !archivedNoteList) {
+      throw new Error('Note list elements not found');
+    }
+
+    // Bersihkan daftar sebelum menambahkan data baru
     noteList.innerHTML = '';
     archivedNoteList.innerHTML = '';
-    
-    // Menambahkan catatan ke daftar
+
+    // Memasukkan catatan ke daftar yang sesuai
     result.data.forEach(note => {
       const noteElement = createNoteElement(note);
       if (note.archived) {
@@ -48,6 +54,7 @@ async function fetchNotes() {
         noteList.appendChild(noteElement);
       }
     });
+
   } catch (error) {
     console.error('Error fetching notes:', error);
     showError(error.message);
