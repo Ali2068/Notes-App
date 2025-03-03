@@ -25,44 +25,6 @@ function showError(message) {
   alert(`Error: ${message}`);
 }
 
-// Fetch daftar catatan dari API
-async function fetchNotes() {
-  showLoadingIndicator();
-  try {
-    const response = await fetch(`${BASE_URL}/notes`);
-    if (!response.ok) throw new Error('Failed to fetch notes');
-    const result = await response.json();
-    
-    // Pastikan elemen yang digunakan sesuai dengan ID dalam HTML
-    const noteList = document.querySelector('notes-list');
-    const archivedNoteList = document.querySelector('archived-notes-list');
-
-    if (!noteList || !archivedNoteList) {
-      throw new Error('Note list elements not found');
-    }
-
-    // Bersihkan daftar sebelum menambahkan data baru
-    noteList.innerHTML = '';
-    archivedNoteList.innerHTML = '';
-
-    // Memasukkan catatan ke daftar yang sesuai
-    result.data.forEach(note => {
-      const noteElement = createNoteElement(note);
-      if (note.archived) {
-        archivedNoteList.appendChild(noteElement);
-      } else {
-        noteList.appendChild(noteElement);
-      }
-    });
-
-  } catch (error) {
-    console.error('Error fetching notes:', error);
-    showError(error.message);
-  } finally {
-    hideLoadingIndicator();
-  }
-}
-
 // Fungsi untuk membuat elemen catatan
 function createNoteElement(note) {
   const noteItem = document.createElement('div');
@@ -87,19 +49,46 @@ function createNoteElement(note) {
   return noteItem;
 }
 
-// Menambahkan catatan baru ke server
-async function addNote(title, body) {
+// Fetch daftar catatan dari API
+async function fetchNotes() {
   showLoadingIndicator();
   try {
-    const response = await fetch(`${BASE_URL}/notes`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, body }),
+    // Ambil catatan aktif
+    const activeResponse = await fetch(`${BASE_URL}/notes`);
+    if (!activeResponse.ok) throw new Error('Failed to fetch active notes');
+    const activeResult = await activeResponse.json();
+
+    // Ambil catatan yang diarsipkan
+    const archivedResponse = await fetch(`${BASE_URL}/notes/archived`);
+    if (!archivedResponse.ok) throw new Error('Failed to fetch archived notes');
+    const archivedResult = await archivedResponse.json();
+
+    // Pastikan elemen yang digunakan sesuai dengan ID dalam HTML
+    const noteList = document.querySelector('notes-list');
+    const archivedNoteList = document.querySelector('archived-notes-list');
+
+    if (!noteList || !archivedNoteList) {
+      throw new Error('Note list elements not found');
+    }
+
+    // Bersihkan daftar sebelum menambahkan data baru
+    noteList.innerHTML = '';
+    archivedNoteList.innerHTML = '';
+
+    // Memasukkan catatan aktif
+    activeResult.data.forEach(note => {
+      const noteElement = createNoteElement(note);
+      noteList.appendChild(noteElement);
     });
-    if (!response.ok) throw new Error('Failed to add note');
-    fetchNotes();
+
+    // Memasukkan catatan arsip
+    archivedResult.data.forEach(note => {
+      const noteElement = createNoteElement(note);
+      archivedNoteList.appendChild(noteElement);
+    });
+
   } catch (error) {
-    console.error('Error adding note:', error);
+    console.error('Error fetching notes:', error);
     showError(error.message);
   } finally {
     hideLoadingIndicator();
@@ -127,13 +116,32 @@ async function toggleArchive(id, isArchived) {
   }
 }
 
-// Menghapus catatan dari server
+// Fungsi untuk menambahkan catatan baru
+async function addNote(title, body) {
+  showLoadingIndicator();
+  try {
+    const response = await fetch(`${BASE_URL}/notes`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, body }),
+    });
+    if (!response.ok) throw new Error('Failed to add note');
+    fetchNotes(); // Perbarui daftar catatan setelah penambahan
+  } catch (error) {
+    console.error('Error adding note:', error);
+    showError(error.message);
+  } finally {
+    hideLoadingIndicator();
+  }
+}
+
+// Fungsi untuk menghapus catatan dari server
 async function deleteNote(id) {
   showLoadingIndicator();
   try {
     const response = await fetch(`${BASE_URL}/notes/${id}`, { method: 'DELETE' });
     if (!response.ok) throw new Error('Failed to delete note');
-    fetchNotes();
+    fetchNotes(); // Refresh daftar catatan setelah penghapusan
   } catch (error) {
     console.error('Error deleting note:', error);
     showError(error.message);
@@ -141,6 +149,10 @@ async function deleteNote(id) {
     hideLoadingIndicator();
   }
 }
+
+// Pastikan fungsi dapat diakses di seluruh aplikasi
+window.addNote = addNote;
+window.deleteNote = deleteNote;
 
 // Menangani event kustom dari note-form
 document.addEventListener("note-added", (event) => {
